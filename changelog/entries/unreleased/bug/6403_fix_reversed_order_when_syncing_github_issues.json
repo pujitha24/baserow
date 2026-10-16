@@ -1,0 +1,9 @@
+{
+    "type": "bug",
+    "message": "Fix reversed order when syncing GitHub issues",
+    "issue_origin": "github",
+    "issue_number": 6403,
+    "domain": "database",
+    "bullet_points": [],
+    "created_at": "2026-10-16"
+}

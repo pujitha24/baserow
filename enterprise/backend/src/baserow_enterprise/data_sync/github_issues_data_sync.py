@@ -246,7 +246,13 @@ class GitHubIssuesDataSyncType(DataSyncType):
                 response = requests.get(
                     url,
                     headers=headers,
-                    params={"page": page, "per_page": per_page, "state": "all"},
+                    params={
+                        "page": page,
+                        "per_page": per_page,
+                        "state": "all",
+                        "sort": "created",
+                        "direction": "asc",
+                    },
                     timeout=20,
                 )
                 if not response.ok:

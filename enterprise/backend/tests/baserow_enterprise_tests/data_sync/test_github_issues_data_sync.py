@@ -242,13 +242,13 @@ def test_create_data_sync_table(enterprise_data_fixture):
 def test_sync_data_sync_table(enterprise_data_fixture):
     responses.add(
         responses.GET,
-        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all",
+        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all&sort=created&direction=asc",
         status=200,
         json=SINGLE_ISSUE_RESPONSE,
     )
     responses.add(
         responses.GET,
-        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all",
+        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all&sort=created&direction=asc",
         status=200,
         json=NO_ISSUES_RESPONSE,
     )
@@ -337,13 +337,13 @@ def test_sync_data_sync_table(enterprise_data_fixture):
 def test_sync_data_sync_table_empty_issue(enterprise_data_fixture):
     responses.add(
         responses.GET,
-        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all",
+        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all&sort=created&direction=asc",
         status=200,
         json=EMPTY_ISSUE_RESPONSE,
     )
     responses.add(
         responses.GET,
-        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all",
+        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all&sort=created&direction=asc",
         status=200,
         json=NO_ISSUES_RESPONSE,
     )
@@ -426,19 +426,19 @@ def test_sync_data_sync_table_empty_issue(enterprise_data_fixture):
 def test_create_data_sync_table_pagination(enterprise_data_fixture):
     responses.add(
         responses.GET,
-        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all",
+        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all&sort=created&direction=asc",
         status=200,
         json=SINGLE_ISSUE_RESPONSE,
     )
     responses.add(
         responses.GET,
-        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all",
+        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all&sort=created&direction=asc",
         status=200,
         json=[SECOND_ISSUE],
     )
     responses.add(
         responses.GET,
-        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=3&per_page=50&state=all",
+        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=3&per_page=50&state=all&sort=created&direction=asc",
         status=200,
         json=NO_ISSUES_RESPONSE,
     )
@@ -486,13 +486,13 @@ def test_create_data_sync_table_pagination(enterprise_data_fixture):
 def test_sync_data_sync_table_is_equal(enterprise_data_fixture):
     responses.add(
         responses.GET,
-        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all",
+        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all&sort=created&direction=asc",
         status=200,
         json=SINGLE_ISSUE_RESPONSE,
     )
     responses.add(
         responses.GET,
-        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all",
+        "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all&sort=created&direction=asc",
         status=200,
         json=NO_ISSUES_RESPONSE,
     )
@@ -858,13 +858,13 @@ def test_sync_data_sync_table_body_with_image_is_stable(enterprise_data_fixture)
     for _ in range(2):
         responses.add(
             responses.GET,
-            "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all",
+            "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all&sort=created&direction=asc",
             status=200,
             json=[issue],
         )
         responses.add(
             responses.GET,
-            "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all",
+            "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all&sort=created&direction=asc",
             status=200,
             json=NO_ISSUES_RESPONSE,
         )
@@ -917,13 +917,13 @@ def test_sync_data_sync_table_body_with_reference_text_is_escaped(
     for _ in range(2):
         responses.add(
             responses.GET,
-            "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all",
+            "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=1&per_page=50&state=all&sort=created&direction=asc",
             status=200,
             json=[issue],
         )
         responses.add(
             responses.GET,
-            "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all",
+            "https://api.github.com/repos/baserow_owner/baserow_repo/issues?page=2&per_page=50&state=all&sort=created&direction=asc",
             status=200,
             json=NO_ISSUES_RESPONSE,
         )
