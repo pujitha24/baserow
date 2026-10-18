@@ -13,8 +13,11 @@ from baserow.contrib.database.fields.field_types import (
     MultipleCollaboratorsFieldType,
 )
 from baserow.contrib.database.rows.handler import RowM2MChangeTracker
+from baserow.contrib.database.rows.operations import ReadDatabaseRowOperationType
 from baserow.contrib.database.rows.signals import rows_created, rows_updated
 from baserow.contrib.database.table.models import RichTextFieldMention
+from baserow.core.handler import CoreHandler
+from baserow.core.models import User
 from baserow.core.notifications.handler import (
     NotificationHandler,
     UserNotificationsGrouper,
@@ -150,9 +153,29 @@ class CollaboratorAddedToRowNotificationType(
         iterator = cls._iter_field_row_and_collaborators_to_notify(
             m2m_change_tracker, rows
         )
+        # Cache the users already checked per table to avoid repeating the checks.
+        checked_per_table = {}
         for field, row, user_ids_to_notify in iterator:
+            table = row.baserow_table
+            allowed, checked = checked_per_table.setdefault(table.id, (set(), set()))
+            unchecked = set(user_ids_to_notify) - checked
+            # Only notify the users who are actually allowed to see the table.
+            for u in User.objects.filter(id__in=unchecked):
+                if CoreHandler().check_permissions(
+                    u,
+                    ReadDatabaseRowOperationType.type,
+                    workspace=table.database.workspace,
+                    context=table,
+                    raise_permission_exceptions=False,
+                ):
+                    allowed.add(u.id)
+            checked |= unchecked
+            recipients = [uid for uid in user_ids_to_notify if uid in allowed]
+            if not recipients:
+                continue
+
             notification = cls.construct_notification(sender=user, row=row, field=field)
-            notification_grouper.add(notification, list(user_ids_to_notify))
+            notification_grouper.add(notification, recipients)
 
         if notification_grouper.has_notifications_to_send():
             notification_grouper.create_all_notifications_and_trigger_task()
