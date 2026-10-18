@@ -87,6 +87,10 @@ class UserSourceUser:
             refresh[USERNAME_CLAIM] = str(self.username)
             updated = True
 
+        if refresh.get(ROLE) != self.role:
+            refresh[ROLE] = self.role
+            updated = True
+
         return refresh, updated
 
     def __eq__(self, other: object) -> bool:

@@ -660,12 +660,18 @@ def test_refresh_json_web_token_update_user(
     url = reverse("api:user_sources:token_refresh")
 
     us_user = data_fixture.create_user_source_user(
-        user_source=user_source, username="before", email="before@before.com"
+        user_source=user_source,
+        username="before",
+        email="before@before.com",
+        role="role_a",
     )
     refresh_token = us_user.get_refresh_token()
 
     modified_user = data_fixture.create_user_source_user(
-        user_source=user_source, username="after", email="after@after.com"
+        user_source=user_source,
+        username="after",
+        email="after@after.com",
+        role="role_b",
     )
 
     with stub_user_source_registry(get_user_return=modified_user):
@@ -684,6 +690,7 @@ def test_refresh_json_web_token_update_user(
     updated_token = UserSourceToken(response_json["refresh_token"])
     assert updated_token["exp"] == refresh_token["exp"]
     assert updated_token["username"] == "after"
+    assert updated_token["role"] == "role_b"
 
 
 @pytest.mark.django_db
