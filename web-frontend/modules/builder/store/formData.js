@@ -35,8 +35,18 @@ const mutations = {
 
     setFormEntryAtPath(page, uniqueElementId, payload)
   },
-  REMOVE_FORM_DATA(state, { page, uniqueElementId }) {
+  REMOVE_FORM_DATA(state, { page, uniqueElementId, ownerId }) {
     if (!page.formData) {
+      return
+    }
+
+    // Another instance took over this entry, so it isn't ours to remove.
+    const entry = getValueAtPath(page.formData, uniqueElementId)
+    if (
+      ownerId !== undefined &&
+      entry?.ownerId !== undefined &&
+      entry.ownerId !== ownerId
+    ) {
       return
     }
 
@@ -51,8 +61,8 @@ const actions = {
   setFormData({ commit }, { page, uniqueElementId, payload }) {
     commit('SET_FORM_DATA', { page, uniqueElementId, payload })
   },
-  removeFormData({ commit }, { page, uniqueElementId }) {
-    commit('REMOVE_FORM_DATA', { page, uniqueElementId })
+  removeFormData({ commit }, { page, uniqueElementId, ownerId }) {
+    commit('REMOVE_FORM_DATA', { page, uniqueElementId, ownerId })
   },
   setElementTouched({ commit }, { page, uniqueElementId, wasTouched }) {
     commit('SET_ELEMENT_TOUCHED', { page, uniqueElementId, wasTouched })

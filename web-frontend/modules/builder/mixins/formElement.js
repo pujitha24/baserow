@@ -2,6 +2,8 @@ import { mapActions } from 'vuex'
 import element from '@baserow/modules/builder/mixins/element'
 import { FormContainerElementType } from '@baserow/modules/builder/elementTypes'
 
+let nextFormElementOwnerId = 1
+
 export default {
   mixins: [element],
   data() {
@@ -63,6 +65,13 @@ export default {
       ).some(({ type }) => type === FormContainerElementType.getType())
     },
   },
+  beforeCreate() {
+    // Assigned before the watchers run, as the immediate `inputValue` watcher
+    // writes the entry. Identifies this instance in the form data, so that it only
+    // ever removes the entry it wrote and not one re-created by another instance
+    // sharing the same `uniqueElementId` (e.g. when an element is moved).
+    this.formElementOwnerId = nextFormElementOwnerId++
+  },
   beforeUnmount() {
     this.unsetFormData()
   },
@@ -89,6 +98,7 @@ export default {
           value,
           elementId: this.element.id,
           touched: this.formElementTouched,
+          ownerId: this.formElementOwnerId,
           type: this.elementType.formDataType(
             this.element,
             this.applicationContext
@@ -105,6 +115,7 @@ export default {
       return this.actionRemoveFormData({
         page: this.elementPage,
         uniqueElementId: this.uniqueElementId,
+        ownerId: this.formElementOwnerId,
       })
     },
     /**

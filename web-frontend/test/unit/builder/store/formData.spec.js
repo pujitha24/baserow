@@ -82,4 +82,30 @@ describe('formData store', () => {
       },
     })
   })
+
+  test('removeFormData keeps an entry that now belongs to another owner', () => {
+    const page = {}
+    const commit = (mutation, payload) => {
+      formDataStore.mutations[mutation](formDataStore.state, payload)
+    }
+    const uniqueElementId = '42'
+
+    // The new instance mounts first and writes the entry.
+    formDataStore.actions.setFormData(
+      { commit },
+      { page, uniqueElementId, payload: { value: [1], ownerId: 2 } }
+    )
+    // The old instance unmounts afterwards.
+    formDataStore.actions.removeFormData(
+      { commit },
+      { page, uniqueElementId, ownerId: 1 }
+    )
+    expect(page.formData[42].value).toStrictEqual([1])
+
+    formDataStore.actions.removeFormData(
+      { commit },
+      { page, uniqueElementId, ownerId: 2 }
+    )
+    expect(page.formData[42]).toBeUndefined()
+  })
 })

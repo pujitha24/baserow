@@ -1,0 +1,9 @@
+{
+    "type": "bug",
+    "message": "Keep a form element's value when it is moved to an earlier container slot in the builder",
+    "issue_origin": "github",
+    "issue_number": 6430,
+    "domain": "builder",
+    "bullet_points": [],
+    "created_at": "2026-11-01"
+}
